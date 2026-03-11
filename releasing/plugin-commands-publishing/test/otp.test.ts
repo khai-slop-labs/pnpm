@@ -88,7 +88,9 @@ describe('publishWithOtpHandling', () => {
   test('throws non-OTP errors directly', async () => {
     const nonOtpError = Object.assign(new Error('forbidden'), { code: 'E403' })
     const context = createMockContext({
-      publish: jest.fn(async () => { throw nonOtpError }),
+      publish: jest.fn(async () => {
+        throw nonOtpError
+      }),
     })
 
     await expect(publishWithOtpHandling({
@@ -102,7 +104,9 @@ describe('publishWithOtpHandling', () => {
   test('throws OtpNonInteractiveError when not a TTY', async () => {
     const context = createMockContext({
       process: { stdin: { isTTY: false }, stdout: { isTTY: true } },
-      publish: jest.fn(async () => { throw createOtpError() }),
+      publish: jest.fn(async () => {
+        throw createOtpError()
+      }),
     })
 
     await expect(publishWithOtpHandling({
@@ -349,7 +353,9 @@ describe('publishWithOtpHandling', () => {
     test('throws OtpSecondChallengeError when OTP is rejected with another EOTP', async () => {
       const context = createMockContext({
         enquirer: { prompt: jest.fn(async () => ({ otp: '123456' })) },
-        publish: jest.fn(async () => { throw createOtpError() }),
+        publish: jest.fn(async () => {
+          throw createOtpError()
+        }),
       })
 
       await expect(publishWithOtpHandling({

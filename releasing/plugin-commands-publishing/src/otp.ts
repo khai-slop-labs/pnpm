@@ -103,7 +103,7 @@ const isOtpError = (error: unknown): error is OtpError =>
  * npm-notice messages look like:
  *   "Open https://www.npmjs.com/login/ab12cd34-ef56 to use your security key for authentication"
  */
-export const NPM_NOTICE_URL_RE = /https?:\/\/[^\s]+/
+export const NPM_NOTICE_URL_RE = /https?:\/\/\S+/
 
 /**
  * Regex to extract the login token from an npm login URL path.
