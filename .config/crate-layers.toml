@@ -12,10 +12,12 @@ name = "foundation"
 description = "Runtime and OS access, hashing, diagnostics, text and pattern utilities. Knows nothing about packages."
 crates = [
   "pnpm-config-dir",
+  "pnpm-creusot-models",
   "pnpm-crypto-hash",
   "pnpm-crypto-shasums-file",
   "pnpm-detect-libc",
   "pnpm-diagnostics",
+  "pnpm-env-placeholders",
   "pnpm-env-replace",
   "pnpm-ffi-fs",
   "pnpm-ffi-mimalloc",
@@ -30,14 +32,19 @@ crates = [
   "pnpm-graph-hasher",
   "pnpm-http",
   "pnpm-install-coordinator",
+  "pnpm-intervals",
   "pnpm-matcher",
   "pnpm-network",
   "pnpm-network-web-auth",
   "pnpm-platform-tags",
   "pnpm-process",
+  "pnpm-reachability",
   "pnpm-reporter",
   "pnpm-semver-include-prerelease",
+  "pnpm-shell-quote",
   "pnpm-signal-registry",
+  "pnpm-star-glob",
+  "pnpm-strongly-connected-components",
   "pnpm-text-sanitize",
   "pnpm-text-section",
   "pnpm-time",
@@ -51,7 +58,7 @@ crates = [
 [[layer]]
 name = "model"
 description = "Names, specifiers, and the formats pnpm reads and writes: manifests, lockfiles, workspace and store layout."
-max_transitive_dependencies = 24
+max_transitive_dependencies = 26
 crates = [
   "pnpm-catalogs-config",
   "pnpm-catalogs-protocol-parser",
@@ -68,6 +75,8 @@ crates = [
   "pnpm-package-manifest",
   "pnpm-package-name",
   "pnpm-patching-config",
+  "pnpm-pkg-name-split",
+  "pnpm-relative-path",
   "pnpm-release-notes",
   "pnpm-release-record",
   "pnpm-resolving-jsr-specifier-parser",
@@ -84,6 +93,7 @@ crates = [
   "pnpm-workspace-state",
   "pnpr-error",
   "pnpr-package-name",
+  "pnpr-package-pattern",
   "pnpr-policy",
   "pnpr-registry",
 ]
@@ -91,7 +101,7 @@ crates = [
 [[layer]]
 name = "service"
 description = "One capability each: resolve, fetch, link, patch, run scripts, talk to a registry. Takes its settings as values and never reads the configuration."
-max_transitive_dependencies = 42
+max_transitive_dependencies = 47
 crates = [
   "pnpm-cargo-resolver",
   "pnpm-cmd-shim",
@@ -292,16 +302,17 @@ pnpm-auth-commands = 9
 pnpm-catalogs-config = 2
 pnpm-catalogs-protocol-parser = 1
 pnpm-catalogs-resolver = 3
-pnpm-cli = 83
-pnpm-cmd-shim = 2
+pnpm-cli = 84
+pnpm-cmd-shim = 3
 pnpm-config = 21
 pnpm-config-parse-overrides = 3
+pnpm-crate-layers = 1
 pnpm-crypto-shasums-file = 4
 pnpm-default-reporter = 7
 pnpm-deps-inspection = 11
-pnpm-deps-inspection-peers = 11
-pnpm-deps-path = 2
-pnpm-deps-restorer = 34
+pnpm-deps-inspection-peers = 12
+pnpm-deps-path = 3
+pnpm-deps-restorer = 35
 pnpm-detect-libc = 1
 pnpm-directory-fetcher = 4
 pnpm-engine-pm-yarn-resolver = 6
@@ -310,6 +321,7 @@ pnpm-engine-runtime-deno-resolver = 7
 pnpm-engine-runtime-node-resolver = 7
 pnpm-engine-size-probe = 7
 pnpm-env-installer = 16
+pnpm-env-replace = 1
 pnpm-executor = 9
 pnpm-exportable-manifest = 6
 pnpm-ffi-fs = 1
@@ -320,17 +332,18 @@ pnpm-git-fetcher = 12
 pnpm-git-utils = 1
 pnpm-github-actions = 8
 pnpm-global = 6
-pnpm-graph-hasher = 3
+pnpm-graph-hasher = 4
 pnpm-hooks = 5
 pnpm-http = 1
 pnpm-injected-deps-syncer = 7
 pnpm-install-coordinator = 3
 pnpm-integrated-benchmark = 6
-pnpm-local-spec = 2
-pnpm-lockfile = 11
-pnpm-lockfile-import = 1
+pnpm-local-spec = 3
+pnpm-lockfile = 13
+pnpm-lockfile-import = 2
 pnpm-lockfile-preferred-versions = 6
 pnpm-lockfile-verification = 9
+pnpm-matcher = 1
 pnpm-micro-benchmark = 14
 pnpm-modules-yaml = 2
 pnpm-napi = 30
@@ -341,9 +354,10 @@ pnpm-pack = 12
 pnpm-package-extensions = 2
 pnpm-package-is-installable = 3
 pnpm-package-manager = 63
-pnpm-package-manifest = 4
+pnpm-package-manifest = 5
 pnpm-package-name = 1
 pnpm-patching = 5
+pnpm-patching-config = 1
 pnpm-pnpr-client = 10
 pnpm-process = 2
 pnpm-publish = 11
@@ -356,19 +370,19 @@ pnpm-release-notes = 1
 pnpm-release-record = 2
 pnpm-reporter = 1
 pnpm-resolving-default-resolver = 12
-pnpm-resolving-deps-resolver = 19
+pnpm-resolving-deps-resolver = 21
 pnpm-resolving-git-resolver = 10
 pnpm-resolving-jsr-specifier-parser = 1
 pnpm-resolving-local-resolver = 7
 pnpm-resolving-npm-resolver = 15
-pnpm-resolving-parse-wanted-dependency = 1
+pnpm-resolving-parse-wanted-dependency = 2
 pnpm-resolving-resolver-base = 6
 pnpm-resolving-tarball-resolver = 9
 pnpm-rust-toolchain = 9
 pnpm-store-dir = 9
-pnpm-tarball = 8
+pnpm-tarball = 9
 pnpm-testing-utils-registry = 5
-pnpm-version-policy = 1
+pnpm-version-policy = 2
 pnpm-versioning = 4
 pnpm-wasm-host = 1
 pnpm-which = 1
@@ -377,8 +391,9 @@ pnpm-workspace-manifest-writer = 8
 pnpm-workspace-projects-filter = 7
 pnpm-workspace-projects-graph = 7
 pnpm-workspace-range-resolver = 1
+pnpm-workspace-spec = 1
 pnpm-workspace-state = 2
-pnpm-workspace-task-scheduler = 2
+pnpm-workspace-task-scheduler = 3
 pnpr = 41
 pnpr-auth = 6
 pnpr-cargo = 2
@@ -390,7 +405,7 @@ pnpr-package-name = 2
 pnpr-pipeline-runs = 2
 pnpr-policy = 1
 pnpr-pypi = 2
-pnpr-registry = 1
+pnpr-registry = 2
 pnpr-route = 5
 pnpr-search = 3
 pnpr-shared-artifacts = 3

@@ -29,6 +29,7 @@ pnpm-catalogs-protocol-parser = { path = "pnpm/crates/catalogs-protocol-parser" 
 pnpm-catalogs-resolver = { path = "pnpm/crates/catalogs-resolver" }
 pnpm-catalogs-types = { path = "pnpm/crates/catalogs-types" }
 pnpm-cmd-shim = { path = "pnpm/crates/cmd-shim" }
+pnpm-creusot-models = { path = "pnpm/crates/creusot-models" }
 pnpm-crypto-hash = { path = "pnpm/crates/crypto-hash" }
 pnpm-crypto-shasums-file = { path = "pnpm/crates/crypto-shasums-file" }
 pnpm-engine-pm-yarn-resolver = { path = "pnpm/crates/engine-pm-yarn-resolver" }
@@ -36,6 +37,7 @@ pnpm-engine-runtime-bun-resolver = { path = "pnpm/crates/engine-runtime-bun-reso
 pnpm-engine-runtime-deno-resolver = { path = "pnpm/crates/engine-runtime-deno-resolver" }
 pnpm-engine-runtime-node-resolver = { path = "pnpm/crates/engine-runtime-node-resolver" }
 pnpm-env-installer = { path = "pnpm/crates/env-installer" }
+pnpm-env-placeholders = { path = "pnpm/crates/env-placeholders" }
 pnpm-env-replace = { path = "pnpm/crates/env-replace" }
 pnpm-ffi-fs = { path = "pnpm/crates/ffi-fs" }
 pnpm-ffi-libsql = { path = "pnpm/crates/ffi-libsql" }
@@ -46,7 +48,10 @@ pnpm-ffi-signal = { path = "pnpm/crates/ffi-signal" }
 pnpm-ffi-sqlite = { path = "pnpm/crates/ffi-sqlite" }
 pnpm-ffi-terminal = { path = "pnpm/crates/ffi-terminal" }
 pnpm-ffi-webcontainer = { path = "pnpm/crates/ffi-webcontainer" }
+pnpm-shell-quote = { path = "pnpm/crates/shell-quote" }
+pnpm-star-glob = { path = "pnpm/crates/star-glob" }
 pnpm-signal-registry = { path = "pnpm/crates/signal-registry" }
+pnpm-strongly-connected-components = { path = "pnpm/crates/strongly-connected-components" }
 pnpm-webcontainer-sys = { path = "pnpm/crates/webcontainer-sys" }
 pnpm-fs = { path = "pnpm/crates/fs" }
 pnpm-fs-packlist = { path = "pnpm/crates/fs-packlist" }
@@ -66,6 +71,8 @@ pnpm-python-installer = { path = "pnpm/crates/python-installer" }
 pnpm-rust-toolchain = { path = "pnpm/crates/rust-toolchain" }
 pnpm-python-resolver = { path = "pnpm/crates/python-resolver" }
 pnpm-package-name = { path = "pnpm/crates/package-name" }
+pnpm-pkg-name-split = { path = "pnpm/crates/pkg-name-split" }
+pnpm-relative-path = { path = "pnpm/crates/relative-path" }
 pnpm-package-extensions = { path = "pnpm/crates/package-extensions" }
 pnpm-package-manifest = { path = "pnpm/crates/package-manifest" }
 pnpm-package-manager = { path = "pnpm/crates/package-manager", default-features = false }
@@ -100,6 +107,8 @@ pnpm-http = { path = "pnpm/crates/http" }
 pnpm-which = { path = "pnpm/crates/which" }
 pnpm-injected-deps-syncer = { path = "pnpm/crates/injected-deps-syncer" }
 pnpm-install-coordinator = { path = "pnpm/crates/install-coordinator" }
+pnpm-intervals = { path = "pnpm/crates/intervals" }
+pnpm-reachability = { path = "pnpm/crates/reachability" }
 pnpm-store-dir = { path = "pnpm/crates/store-dir" }
 pnpm-reporter = { path = "pnpm/crates/reporter" }
 pnpm-patching = { path = "pnpm/crates/patching" }
@@ -140,6 +149,7 @@ pnpr-libsql = { path = "pnpr/crates/libsql" }
 pnpr-oci = { path = "pnpr/crates/oci" }
 pnpr-osv = { path = "pnpr/crates/osv" }
 pnpr-package-name = { path = "pnpr/crates/package-name" }
+pnpr-package-pattern = { path = "pnpr/crates/package-pattern" }
 pnpr-policy = { path = "pnpr/crates/policy" }
 pnpr-pypi = { path = "pnpr/crates/pypi" }
 pnpr-registry = { path = "pnpr/crates/registry" }
@@ -173,6 +183,10 @@ cargo-util-schemas = { version = "0.15.0" }
 jiff = { version = "1.0.3" }
 console = { version = "0.16.6" }
 core-foundation = { version = "0.10.1" }
+# Specifications for the Creusot verifier. Every dependent declares it under
+# `[target.'cfg(creusot)'.dependencies]`, so it is compiled only by
+# `cargo creusot` and never reaches a shipped build.
+creusot-std = { version = "0.15.0" }
 crossterm = { version = "0.29.0" }
 dashmap = { version = "7.0.0-rc2" }
 deno_task_shell = { version = "0.33.3" }
@@ -362,8 +376,12 @@ allow_branch = "main"
 # at use sites compiles cleanly without a wrapper); this `check-cfg`
 # entry tells stable `cargo check` that the cfg name is expected even
 # though it's never set off-dylint.
+#
+# `cfg(creusot)` is set by `cargo creusot` alone. It gates the Creusot
+# specifications and the `creusot-std` dependency, so an ordinary build
+# compiles neither. See `pnpm/VERIFICATION.md`.
 [workspace.lints.rust]
-unexpected_cfgs = { level = "warn", check-cfg = ['cfg(dylint_lib, values("perfectionist"))'] }
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(dylint_lib, values("perfectionist"))', 'cfg(creusot)'] }
 
 # Crates that may hold `unsafe` opt out at their crate root.
 # UNSAFE_POLICY.md says which, and what a `// SAFETY:` comment there has to discharge.

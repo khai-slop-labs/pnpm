@@ -1245,6 +1245,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "creusot-std"
+version = "0.15.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3c258fc3bed45edeb0509fce569f66565cae19b583d24a827faaa4e1abe51d2b"
+dependencies = [
+ "creusot-std-proc",
+]
+
+[[package]]
+name = "creusot-std-proc"
+version = "0.15.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "848b1d0c5b674f9eb80e144602ab64d8ddcef5033d60a07a5be112b1c931d029"
+dependencies = [
+ "pearlite-syn",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
+ "uuid",
+]
+
+[[package]]
 name = "criterion"
 version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4570,6 +4592,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "df94ce210e5bc13cb6651479fa48d14f601d9858cfe0467f43ae157023b938d3"
 
 [[package]]
+name = "pearlite-syn"
+version = "0.15.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ff7afb8267bb550980a04ce048a1f1592af3741fab76d1b364678696efbe2570"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
+]
+
+[[package]]
 name = "peeking_take_while"
 version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5038,6 +5071,7 @@ dependencies = [
  "pnpm-rust-toolchain",
  "pnpm-semver-include-prerelease",
  "pnpm-store-dir",
+ "pnpm-strongly-connected-components",
  "pnpm-tarball",
  "pnpm-testing-utils-registry",
  "pnpm-text-sanitize",
@@ -5102,6 +5136,7 @@ dependencies = [
  "pipe-trait",
  "pnpm-fs",
  "pnpm-package-manifest",
+ "pnpm-shell-quote",
  "rayon",
  "same-file",
  "serde_json",
@@ -5183,11 +5218,23 @@ version = "0.0.0"
 dependencies = [
  "clap",
  "command-extra",
+ "pnpm-strongly-connected-components",
  "pretty_assertions",
  "prost 0.14.6",
  "serde",
  "tempfile",
  "toml",
+]
+
+[[package]]
+name = "pnpm-creusot-models"
+version = "0.0.1"
+dependencies = [
+ "creusot-std",
+ "num_cpus",
+ "pipe-trait",
+ "proptest",
+ "split-first-char",
 ]
 
 [[package]]
@@ -5278,6 +5325,7 @@ dependencies = [
  "pnpm-catalogs-types",
  "pnpm-config",
  "pnpm-config-parse-overrides",
+ "pnpm-intervals",
  "pnpm-lockfile",
  "pnpm-matcher",
  "pnpm-package-manifest",
@@ -5297,6 +5345,7 @@ dependencies = [
  "derive_more",
  "node-semver",
  "pnpm-crypto-hash",
+ "pnpm-pkg-name-split",
  "pnpm-tool-protocol",
 ]
 
@@ -5345,6 +5394,7 @@ dependencies = [
  "pnpm-patching",
  "pnpm-pnpr-client",
  "pnpm-process",
+ "pnpm-reachability",
  "pnpm-real-hoist",
  "pnpm-reporter",
  "pnpm-resolving-npm-resolver",
@@ -5576,9 +5626,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "pnpm-env-placeholders"
+version = "0.0.1"
+dependencies = [
+ "creusot-std",
+ "pnpm-creusot-models",
+ "pretty_assertions",
+]
+
+[[package]]
 name = "pnpm-env-replace"
 version = "0.0.1"
 dependencies = [
+ "pnpm-env-placeholders",
  "pretty_assertions",
 ]
 
@@ -5849,6 +5909,7 @@ dependencies = [
  "pnpm-detect-libc",
  "pnpm-fs",
  "pnpm-process",
+ "pnpm-strongly-connected-components",
  "pretty_assertions",
  "serde_json",
  "sha2 0.10.9",
@@ -5955,10 +6016,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "pnpm-intervals"
+version = "0.0.1"
+dependencies = [
+ "creusot-std",
+ "pnpm-creusot-models",
+ "pretty_assertions",
+]
+
+[[package]]
 name = "pnpm-local-spec"
 version = "0.0.1"
 dependencies = [
  "pnpm-fs",
+ "pnpm-pkg-name-split",
  "pnpm-workspace-spec",
  "pretty_assertions",
 ]
@@ -5980,15 +6051,16 @@ dependencies = [
  "pnpm-local-spec",
  "pnpm-package-manifest",
  "pnpm-patching-config",
+ "pnpm-pkg-name-split",
  "pnpm-resolving-parse-wanted-dependency",
  "pnpm-semver-include-prerelease",
+ "pnpm-strongly-connected-components",
  "pnpm-tool-protocol",
  "pretty_assertions",
  "rayon",
  "serde",
  "serde-saphyr",
  "serde_json",
- "split-first-char",
  "ssri",
  "tempfile",
  "text-block-macros",
@@ -6001,6 +6073,7 @@ version = "0.0.1"
 dependencies = [
  "derive_more",
  "miette 7.6.0",
+ "pnpm-pkg-name-split",
  "pnpm-resolving-resolver-base",
  "pretty_assertions",
  "serde_json",
@@ -6059,6 +6132,7 @@ dependencies = [
 name = "pnpm-matcher"
 version = "0.0.1"
 dependencies = [
+ "pnpm-star-glob",
  "regex",
 ]
 
@@ -6413,6 +6487,7 @@ dependencies = [
  "pipe-trait",
  "pnpm-diagnostics",
  "pnpm-fs",
+ "pnpm-relative-path",
  "pnpm-tool-protocol",
  "pnpm-yaml-document-sync",
  "pretty_assertions",
@@ -6462,9 +6537,20 @@ dependencies = [
  "indexmap 2.14.2",
  "miette 7.6.0",
  "node-semver",
+ "pnpm-pkg-name-split",
  "pretty_assertions",
  "sha2 0.10.9",
  "tempfile",
+]
+
+[[package]]
+name = "pnpm-pkg-name-split"
+version = "0.0.1"
+dependencies = [
+ "creusot-std",
+ "pnpm-creusot-models",
+ "pretty_assertions",
+ "split-first-char",
 ]
 
 [[package]]
@@ -6626,6 +6712,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "pnpm-reachability"
+version = "0.0.1"
+dependencies = [
+ "creusot-std",
+ "pnpm-creusot-models",
+ "pretty_assertions",
+]
+
+[[package]]
 name = "pnpm-real-hoist"
 version = "0.0.1"
 dependencies = [
@@ -6679,6 +6774,16 @@ dependencies = [
  "tempfile",
  "tokio",
  "walkdir",
+]
+
+[[package]]
+name = "pnpm-relative-path"
+version = "0.0.1"
+dependencies = [
+ "creusot-std",
+ "pnpm-creusot-models",
+ "pretty_assertions",
+ "split-first-char",
 ]
 
 [[package]]
@@ -6775,11 +6880,13 @@ dependencies = [
  "pnpm-package-manifest",
  "pnpm-package-name",
  "pnpm-patching",
+ "pnpm-reachability",
  "pnpm-resolving-jsr-specifier-parser",
  "pnpm-resolving-npm-resolver",
  "pnpm-resolving-parse-wanted-dependency",
  "pnpm-resolving-resolver-base",
  "pnpm-semver-include-prerelease",
+ "pnpm-strongly-connected-components",
  "pnpm-tool-protocol",
  "pnpm-workspace-spec",
  "pretty_assertions",
@@ -6899,6 +7006,7 @@ name = "pnpm-resolving-parse-wanted-dependency"
 version = "0.0.1"
 dependencies = [
  "pnpm-package-name",
+ "pnpm-pkg-name-split",
 ]
 
 [[package]]
@@ -6995,8 +7103,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "pnpm-shell-quote"
+version = "0.0.1"
+dependencies = [
+ "creusot-std",
+ "pnpm-creusot-models",
+ "pnpm-process",
+ "pretty_assertions",
+ "split-first-char",
+]
+
+[[package]]
 name = "pnpm-signal-registry"
 version = "0.0.1"
+
+[[package]]
+name = "pnpm-star-glob"
+version = "0.0.1"
+dependencies = [
+ "creusot-std",
+ "pnpm-creusot-models",
+ "pretty_assertions",
+]
 
 [[package]]
 name = "pnpm-store-dir"
@@ -7036,6 +7164,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "pnpm-strongly-connected-components"
+version = "0.0.1"
+dependencies = [
+ "creusot-std",
+ "pnpm-creusot-models",
+ "pretty_assertions",
+]
+
+[[package]]
 name = "pnpm-tarball"
 version = "0.0.1"
 dependencies = [
@@ -7055,6 +7192,7 @@ dependencies = [
  "pnpm-lockfile",
  "pnpm-network",
  "pnpm-package-manifest",
+ "pnpm-relative-path",
  "pnpm-reporter",
  "pnpm-store-dir",
  "pnpm-testing-utils",
@@ -7173,6 +7311,7 @@ dependencies = [
  "miette 7.6.0",
  "node-semver",
  "pnpm-matcher",
+ "pnpm-pkg-name-split",
  "pretty_assertions",
 ]
 
@@ -7322,6 +7461,9 @@ dependencies = [
 [[package]]
 name = "pnpm-workspace-spec"
 version = "0.0.1"
+dependencies = [
+ "pnpm-pkg-name-split",
+]
 
 [[package]]
 name = "pnpm-workspace-state"
@@ -7347,6 +7489,7 @@ dependencies = [
  "miette 7.6.0",
  "pnpm-fs",
  "pnpm-reporter",
+ "pnpm-strongly-connected-components",
  "pretty_assertions",
  "regex",
  "rustc-hash 2.1.3",
@@ -7661,6 +7804,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "pnpr-package-pattern"
+version = "0.0.1"
+dependencies = [
+ "creusot-std",
+ "pnpm-creusot-models",
+ "pretty_assertions",
+ "split-first-char",
+]
+
+[[package]]
 name = "pnpr-pipeline-runs"
 version = "0.0.1"
 dependencies = [
@@ -7704,6 +7857,7 @@ dependencies = [
  "derive_more",
  "indexmap 2.14.2",
  "pnpr-package-name",
+ "pnpr-package-pattern",
 ]
 
 [[package]]

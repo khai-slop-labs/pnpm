@@ -6,11 +6,10 @@ use super::{
     HashMap,
     HashSet,
     NodeId,
-    PeerNameTarjan,
     Walker,
 };
-
-type PeerSccPass = crate::strongly_connected_components::SccPass<crate::NodeId>;
+use crate::strongly_connected_components::components_of;
+use pnpm_strongly_connected_components::StronglyConnectedComponents;
 
 impl Walker<'_> {
     pub(super) fn is_cyclic_peer(
@@ -246,22 +245,29 @@ impl Walker<'_> {
 
     pub(super) fn cyclic_peer_names(&self) -> HashSet<String> {
         let graph = self.peer_name_graph();
-
-        let mut tarjan = PeerNameTarjan {
-            graph: &graph,
-            index_of: HashMap::default(),
-            low_of: HashMap::default(),
-            on_stack: HashSet::default(),
-            tarjan_stack: Vec::new(),
-            cyclic: HashSet::default(),
-            next_index: 0,
-        };
-        for name in graph.keys() {
-            if !tarjan.index_of.contains_key(name.as_str()) {
-                tarjan.strongconnect(name);
-            }
-        }
-        tarjan.cyclic
+        let index_of: HashMap<&str, usize> = graph
+            .keys()
+            .enumerate()
+            .map(|(index, name)| (name.as_str(), index))
+            .collect();
+        // Every peer name is a vertex of the graph, so no target is dropped.
+        let adjacency: Vec<Vec<usize>> = graph
+            .values()
+            .map(|peers| {
+                peers
+                    .iter()
+                    .filter_map(|peer| index_of.get(peer).copied())
+                    .collect()
+            })
+            .collect();
+        let components =
+            StronglyConnectedComponents::compute(&adjacency, &vec![false; adjacency.len()]);
+        graph
+            .keys()
+            .enumerate()
+            .filter(|&(node, _)| components.may_lie_on_cycle(node, &adjacency))
+            .map(|(_, name)| name.clone())
+            .collect()
     }
 
     /// The `package name → resolved peer names` graph, with every peer name
@@ -309,8 +315,8 @@ impl Walker<'_> {
 
     /// Strongly-connected components of the peer graph (node → resolved
     /// peers, restricted to peers that themselves carry peers, peerless
-    /// peers can't close a cycle). Iterative Tarjan, returning the SCCs
-    /// in reverse-topological order plus a `NodeId → SCC index` map.
+    /// peers can't close a cycle), in reverse-topological order, plus a
+    /// `NodeId → SCC index` map.
     ///
     /// Vertices and edge targets are canonicalized through
     /// [`Self::cache_owner_node_id`] to match the owner-keyed lookups
@@ -339,13 +345,6 @@ impl Walker<'_> {
             out
         };
 
-        let mut pass = PeerSccPass::default();
-        for root in &participants {
-            if pass.index_of.contains_key(root) {
-                continue;
-            }
-            pass.visit_root(root, &neighbors);
-        }
-        (pass.sccs, pass.scc_of)
+        components_of(&participants, neighbors)
     }
 }

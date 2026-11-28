@@ -87,6 +87,12 @@ confidence-threshold = 0.8
 exceptions = [
   # `cap-primitives` uses winx for descriptor-relative traversal on Windows.
   { name = "winx", allow = ["Apache-2.0 WITH LLVM-exception"] },
+  # Creusot's specification library and its macros. Every dependent takes
+  # `creusot-std` under `[target.'cfg(creusot)'.dependencies]`, a cfg only
+  # `cargo creusot` sets, so no shipped build compiles or links either.
+  # See `pnpm/VERIFICATION.md`.
+  { name = "creusot-std", allow = ["LGPL-2.1-or-later"] },
+  { name = "creusot-std-proc", allow = ["LGPL-2.1-or-later"] },
   # The first-party `pnpr*` crates are licensed under PolyForm Shield (see
   # `pnpr/LICENSE.md`), not the MIT used by the rest of the workspace.
   # cargo-deny only recognizes the PolyForm-Noncommercial identifier for this
@@ -108,6 +114,7 @@ exceptions = [
   { name = "pnpr-error", allow = ["PolyForm-Noncommercial-1.0.0"] },
   { name = "pnpr-fixtures", allow = ["PolyForm-Noncommercial-1.0.0"] },
   { name = "pnpr-package-name", allow = ["PolyForm-Noncommercial-1.0.0"] },
+  { name = "pnpr-package-pattern", allow = ["PolyForm-Noncommercial-1.0.0"] },
   { name = "pnpr-policy", allow = ["PolyForm-Noncommercial-1.0.0"] },
   { name = "pnpr-registry", allow = ["PolyForm-Noncommercial-1.0.0"] },
   { name = "pnpr-route", allow = ["PolyForm-Noncommercial-1.0.0"] },
@@ -197,6 +204,11 @@ license-files = [{ path = "../../LICENSE.md", hash = 0x652a978e }]
 
 [[licenses.clarify]]
 name = "pnpr-package-name"
+expression = "PolyForm-Noncommercial-1.0.0"
+license-files = [{ path = "../../LICENSE.md", hash = 0x652a978e }]
+
+[[licenses.clarify]]
+name = "pnpr-package-pattern"
 expression = "PolyForm-Noncommercial-1.0.0"
 license-files = [{ path = "../../LICENSE.md", hash = 0x652a978e }]
 
